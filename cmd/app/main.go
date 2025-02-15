@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"proj/internal/common/infrastructure/database"
 	commonRouter "proj/internal/common/interfaces/http/router"
+	itemsMongo "proj/internal/inspections/infrastructure/repository/mongodb"
 	"proj/internal/user/infrastructure/repository/mongodb"
 	"proj/pkg/logger"
 	"time"
@@ -12,6 +13,7 @@ import (
 	"proj/internal/config"
 	"proj/pkg/tracer"
 
+	itemsRouter "proj/internal/inspections/interfaces/http/router"
 	userRouter "proj/internal/user/interfaces/http/router"
 
 	"go.uber.org/zap"
@@ -44,7 +46,10 @@ func main() {
 
 	userRepo := mongodb.NewUserRepository(db)
 	uRouter := userRouter.NewUserRouter(userRepo)
-	r := commonRouter.NewRouter(uRouter)
+
+	itemsRepo := itemsMongo.NewInspectionItemsRepository(db)
+	iRouter := itemsRouter.NewItemsRouter(itemsRepo)
+	r := commonRouter.NewRouter(uRouter, iRouter)
 
 	addr := ":" + cfg.Server.Port
 	logger.Info("Server starting", zap.String("address", addr))
