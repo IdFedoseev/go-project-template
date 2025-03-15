@@ -27,6 +27,7 @@ func (r *UserRouter) RegisterRoutes(group *router.Group) {
 	userHandler := handler.NewUserHandler(cmdHandler, queryHandler)
 
 	// Routes
+	group.HandleFunc("GET /users/current", userHandler.CurrentUser)
 	group.HandleFunc("GET /users", userHandler.ListUsers)
 	group.HandleFunc("POST /users", userHandler.CreateUser)
 	group.HandleFunc("GET /users/{id}", userHandler.GetUser)

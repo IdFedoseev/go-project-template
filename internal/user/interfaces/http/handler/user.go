@@ -170,6 +170,13 @@ func (h *UserHandler) ListUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(users)
 }
 
+func (h *UserHandler) CurrentUser(w http.ResponseWriter, r *http.Request) {
+	claims := r.Context().Value("claims")
+	fmt.Println(claims)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(claims)
+}
+
 func extractIDFromURL(r *http.Request) (string, error) {
 	id := r.PathValue("id")
 	if id == "" {

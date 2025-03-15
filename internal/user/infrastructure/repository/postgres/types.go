@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"proj/internal/domain/entity"
+	"proj/internal/user/domain/entity"
 )
 
 // PostgresID преобразует entity.ID в uint

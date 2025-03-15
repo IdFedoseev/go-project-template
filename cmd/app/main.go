@@ -13,6 +13,7 @@ import (
 	"proj/internal/config"
 	"proj/pkg/tracer"
 
+	authRouter "proj/internal/auth/interfaces/http/router"
 	itemsRouter "proj/internal/inspections/interfaces/http/router"
 	userRouter "proj/internal/user/interfaces/http/router"
 
@@ -46,10 +47,11 @@ func main() {
 
 	userRepo := mongodb.NewUserRepository(db)
 	uRouter := userRouter.NewUserRouter(userRepo)
+	aRouter := authRouter.NewAuthRouter(userRepo)
 
 	itemsRepo := itemsMongo.NewInspectionItemsRepository(db)
 	iRouter := itemsRouter.NewItemsRouter(itemsRepo)
-	r := commonRouter.NewRouter(uRouter, iRouter)
+	r := commonRouter.NewRouter(uRouter, iRouter, aRouter)
 
 	addr := ":" + cfg.Server.Port
 	logger.Info("Server starting", zap.String("address", addr))
